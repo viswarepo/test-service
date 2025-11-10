@@ -33,7 +33,6 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      |
             az storage blob upload \
               --account-name viswastr\
               --container-name viswacontainer \
