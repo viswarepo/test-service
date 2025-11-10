@@ -4,21 +4,29 @@
 # https://aka.ms/yaml
 
 # Build stage
-- task: Maven@3
+- task: Maven@4
   inputs:
+    azureSubscription: 'Azure subscription 1(e22222f7-2095-4bf0-9d8e-0d6b764d6dc0)'
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
     options: '-DskipTests'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
 
 # Upload to Azure Blob Storage stage
 - task: AzureCLI@2
   inputs:
-    azureSubscription: '<Your Azure Subscription Service Connection Name>'
+    azureSubscription: 'Azure subscription 1(e22222f7-2095-4bf0-9d8e-0d6b764d6dc0)'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
       az storage blob upload \
-        --account-name <Your Storage Account Name> \
-        --container-name <Your Blob Container Name> \
+        --account-name viswamorg \
+        --container-name viswastr \
         --file $(System.DefaultWorkingDirectory)/target/*.jar \
-        --name <Desired Blob Name>.jar
+        --name testArtifact.jar
