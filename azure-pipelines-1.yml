@@ -26,4 +26,17 @@ steps:
       mavenAuthenticateFeed: false
       effectivePomSkip: false
       sonarQubeRunAnalysis: false
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Azure subscription 1(e22222f7-2095-4bf0-9d8e-0d6b764d6dc0)'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      |
+            az storage blob upload \
+              --account-name viswastr\
+              --container-name viswacontainer \
+              --file $(System.DefaultWorkingDirectory)/target/*.jar \
+              --name testArtifactBlob.jar
   
