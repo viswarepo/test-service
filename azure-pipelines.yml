@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+# Build stage
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean package'
+    options: '-DskipTests'
+
+# Upload to Azure Blob Storage stage
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: '<Your Azure Subscription Service Connection Name>'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az storage blob upload \
+        --account-name <Your Storage Account Name> \
+        --container-name <Your Blob Container Name> \
+        --file $(System.DefaultWorkingDirectory)/target/*.jar \
+        --name <Desired Blob Name>.jar
